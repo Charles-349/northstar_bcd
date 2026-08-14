@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import order from './orders/orders.router';
 import returnRoutes from './returns/returns.router';
-
+import analyticsRouter from './analytics';
 
 const app = express();
 
@@ -14,9 +14,11 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static('public'));
 
 // Routes
 order(app);
+app.use('/api', analyticsRouter);
 returnRoutes(app);
 
 
