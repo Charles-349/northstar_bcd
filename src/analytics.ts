@@ -21,7 +21,7 @@ export const queryLogs: SupportQueryLog[] = [
 // TICKET NS-11: Add support query logging
 // Endpoint: POST /api/support/log
 
-router.post('/api/support/log', (req: Request, res: Response) => {
+router.post('/support/log', (req: Request, res: Response) => {
   const { category, status } = req.body;
 
   if (!category || !status) {
@@ -49,7 +49,7 @@ router.post('/api/support/log', (req: Request, res: Response) => {
 // TICKET NS-13: Build analytics calculation endpoint
 // Endpoint: GET /api/analytics
 
-router.get('/api/analytics', (_req: Request, res: Response) => {
+router.get('/analytics', (_req: Request, res: Response) => {
   const totalQueries = queryLogs.length;
   const automaticallySolved = queryLogs.filter(q => q.status === 'resolved').length;
   const escalated = queryLogs.filter(q => q.status === 'escalated').length;
