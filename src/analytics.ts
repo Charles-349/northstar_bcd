@@ -17,10 +17,10 @@ export const queryLogs: SupportQueryLog[] = [
   { id: 4, category: 'Order Status', status: 'resolved', timestamp: new Date() }
 ];
 
-// =========================================================================
+
 // TICKET NS-11: Add support query logging
 // Endpoint: POST /api/support/log
-// =========================================================================
+
 router.post('/api/support/log', (req: Request, res: Response) => {
   const { category, status } = req.body;
 
@@ -45,10 +45,10 @@ router.post('/api/support/log', (req: Request, res: Response) => {
   return res.status(201).json({ message: 'Query logged successfully', log: newLog });
 });
 
-// =========================================================================
+
 // TICKET NS-13: Build analytics calculation endpoint
 // Endpoint: GET /api/analytics
-// =========================================================================
+
 router.get('/api/analytics', (_req: Request, res: Response) => {
   const totalQueries = queryLogs.length;
   const automaticallySolved = queryLogs.filter(q => q.status === 'resolved').length;

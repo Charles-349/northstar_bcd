@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
     escalateQueryService,
     getTicketByNumberService,
-} from "./support.service";
+} from "./support.services";
 
 // NS-12: Escalate a support query into a ticket
 export const escalateQueryController = async (req: Request, res: Response) => {
