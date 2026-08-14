@@ -2,6 +2,11 @@ import type { OrderTracking } from "../types/order";
 
 const API_URL = "http://localhost:8081";
 
+interface OrderTrackingResponse {
+  message: string;
+  tracking: OrderTracking;
+}
+
 export const getOrderTracking = async (
   orderNumber: string
 ): Promise<OrderTracking> => {
@@ -17,5 +22,7 @@ export const getOrderTracking = async (
     throw new Error("SERVER_ERROR");
   }
 
-  return response.json();
+  const data: OrderTrackingResponse = await response.json();
+
+  return data.tracking;
 };

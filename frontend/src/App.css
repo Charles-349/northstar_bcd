@@ -1,4 +1,43 @@
-* {
+.app {
+  min-height: 100vh;
+}
+
+.app-navigation {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: #111827;
+  position: relative;
+  z-index: 1000;
+}
+
+.nav-button {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: #374151;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.nav-button:hover {
+  background: #4b5563;
+}
+
+.nav-button.active {
+  background: #2563eb;
+}
+
+.app-content {
+  width: 100%;
+}
+* 
+{
   box-sizing: border-box;
 }
 

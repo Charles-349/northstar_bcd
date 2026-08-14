@@ -4,6 +4,7 @@ import order from './orders/orders.router';
 import returnRoutes from './returns/returns.router';
 import analyticsRouter from './analytics';
 import supportRoutes from './support/support.router';
+import analytics from './analytics/analytics.router';
 
 const app = express();
 
@@ -22,6 +23,7 @@ order(app);
 app.use('/api', analyticsRouter);
 returnRoutes(app);
 supportRoutes(app);
+analytics(app);
 
 
 
