@@ -3,6 +3,7 @@ import cors from 'cors';
 import order from './orders/orders.router';
 import returnRoutes from './returns/returns.router';
 import analyticsRouter from './analytics';
+import supportRoutes from './support/support.router';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.static('public'));
 order(app);
 app.use('/api', analyticsRouter);
 returnRoutes(app);
+supportRoutes(app);
 
 
 
