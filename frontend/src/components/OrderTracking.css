@@ -1,0 +1,402 @@
+.tracking-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #f5f7fb;
+  padding: clamp(30px, 6vw, 70px) 16px;
+}
+
+.tracking-container {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+/* ---------- HEADER ---------- */
+
+.tracking-header {
+  text-align: center;
+  margin-bottom: clamp(25px, 5vw, 40px);
+}
+
+.tracking-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #111827;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+}
+
+.tracking-header h1 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: clamp(28px, 5vw, 36px);
+  line-height: 1.2;
+}
+
+.tracking-header p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #6b7280;
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.6;
+}
+
+/* ---------- SEARCH FORM ---------- */
+
+.tracking-form {
+  width: 100%;
+  background: white;
+  padding: clamp(18px, 4vw, 25px);
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+  margin-bottom: 25px;
+}
+
+.tracking-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #374151;
+}
+
+.search-wrapper {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+
+.search-icon {
+  flex-shrink: 0;
+  margin-left: 14px;
+  color: #6b7280;
+}
+
+.search-wrapper input {
+  flex: 1;
+  min-width: 0;
+
+  border: none;
+  outline: none;
+
+  font-size: 16px;
+  padding: 15px 10px;
+
+  color: #111827;
+  background: transparent;
+}
+
+.search-wrapper input::placeholder {
+  color: #9ca3af;
+}
+
+.search-wrapper button {
+  flex-shrink: 0;
+
+  border: none;
+  background: #111827;
+  color: white;
+
+  padding: 15px 22px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.search-wrapper button:hover {
+  background: #374151;
+}
+
+.search-wrapper button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- ERROR ---------- */
+
+.error-message {
+  width: 100%;
+
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+
+  color: #991b1b;
+
+  padding: 20px;
+  border-radius: 12px;
+
+  margin-bottom: 25px;
+}
+
+.error-message svg {
+  flex-shrink: 0;
+  font-size: 22px;
+  margin-top: 2px;
+}
+
+.error-message strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.error-message p {
+  margin: 0;
+  color: #b91c1c;
+  line-height: 1.5;
+}
+
+/* ---------- ORDER CARD ---------- */
+
+.order-card {
+  width: 100%;
+
+  background: white;
+  border-radius: 14px;
+
+  padding: clamp(20px, 5vw, 30px);
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+
+  overflow: hidden;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  padding-bottom: 25px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.order-card-header span:first-child {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.order-card-header h2 {
+  margin: 5px 0 0;
+
+  color: #111827;
+
+  font-size: clamp(20px, 4vw, 26px);
+
+  word-break: break-word;
+}
+
+.status {
+  flex-shrink: 0;
+
+  padding: 8px 14px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+
+  background: #e0f2fe;
+  color: #0369a1;
+
+  white-space: nowrap;
+}
+
+/* ---------- DETAILS ---------- */
+
+.tracking-details {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 25px;
+
+  margin-top: 30px;
+}
+
+.detail-item {
+  min-width: 0;
+
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.detail-item svg {
+  flex-shrink: 0;
+
+  font-size: 22px;
+
+  color: #374151;
+
+  margin-top: 2px;
+}
+
+.detail-item span {
+  display: block;
+
+  color: #6b7280;
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+.detail-item strong {
+  display: block;
+
+  color: #111827;
+
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- TABLET ---------- */
+
+@media (max-width: 768px) {
+  .tracking-page {
+    padding: 40px 16px;
+  }
+
+  .tracking-details {
+    gap: 20px;
+  }
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 600px) {
+  .tracking-page {
+    padding: 30px 12px;
+  }
+
+  .tracking-header {
+    margin-bottom: 25px;
+  }
+
+  .tracking-icon {
+    width: 56px;
+    height: 56px;
+
+    font-size: 24px;
+
+    margin-bottom: 15px;
+  }
+
+  .tracking-form {
+    padding: 18px;
+  }
+
+  /*
+    Stack the input and button on small screens.
+    This prevents horizontal overflow.
+  */
+
+  .search-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+
+    border: none;
+    overflow: visible;
+
+    gap: 10px;
+  }
+
+  .search-icon {
+    display: none;
+  }
+
+  .search-wrapper input {
+    width: 100%;
+
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+
+    padding: 14px 12px;
+  }
+
+  .search-wrapper button {
+    width: 100%;
+
+    border-radius: 9px;
+
+    padding: 14px;
+  }
+
+  .order-card {
+    padding: 20px;
+  }
+
+  .order-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .tracking-details {
+    grid-template-columns: 1fr;
+
+    gap: 22px;
+  }
+}
+
+/* ---------- VERY SMALL PHONES ---------- */
+
+@media (max-width: 380px) {
+  .tracking-page {
+    padding: 25px 10px;
+  }
+
+  .tracking-form,
+  .order-card {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  .tracking-header h1 {
+    font-size: 25px;
+  }
+
+  .tracking-header p {
+    font-size: 14px;
+  }
+
+  .error-message {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .status {
+    font-size: 12px;
+    padding: 7px 11px;
+  }
+
+  .detail-item {
+    gap: 10px;
+  }
+}
+
