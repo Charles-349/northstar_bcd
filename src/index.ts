@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import order from './orders/orders.router';
+import returnRoutes from './returns/returns.router';
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 order(app);
+returnRoutes(app);
 
 
 
