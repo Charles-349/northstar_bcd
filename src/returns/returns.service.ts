@@ -1,32 +1,45 @@
-import { eq } from "drizzle-orm";
+import { and, desc, eq, inArray } from "drizzle-orm";
 import db from "../Drizzle/db";
 import { orders, returns, refunds } from "../Drizzle/schema";
 
-const RETURN_WINDOW_DAYS = 30;
+const RETURN_WINDOW_DAYS = 90;
 
-// NS-7: Check if an order is eligible for a return
-export const checkReturnEligibilityService = async (orderNumber: string) => {
+export const checkReturnEligibilityService = async (
+    orderNumber: string
+) => {
     const order = await db.query.orders.findFirst({
-        where: eq(orders.orderNumber, orderNumber),
-        with: {
-            returns: true,
-        },
+        where: eq(
+            orders.orderNumber,
+            orderNumber
+        ),
     });
 
     if (!order) {
-        return { eligible: false, reason: "Order not found." };
+        return {
+            eligible: false,
+            reason: "Order not found.",
+        };
     }
 
     if (order.status !== "DELIVERED") {
-        return { eligible: false, reason: "Order has not been delivered yet." };
+        return {
+            eligible: false,
+            reason: "Order has not been delivered yet.",
+        };
     }
 
     if (!order.deliveredAt) {
-        return { eligible: false, reason: "No delivery date on record for this order." };
+        return {
+            eligible: false,
+            reason: "No delivery date on record for this order.",
+        };
     }
 
     const deadline = new Date(order.deliveredAt);
-    deadline.setDate(deadline.getDate() + RETURN_WINDOW_DAYS);
+
+    deadline.setDate(
+        deadline.getDate() + RETURN_WINDOW_DAYS
+    );
 
     if (new Date() > deadline) {
         return {
@@ -35,11 +48,21 @@ export const checkReturnEligibilityService = async (orderNumber: string) => {
         };
     }
 
-    const activeReturn = order.returns?.find(
-        (r: any) => r.status === "REQUESTED" || r.status === "APPROVED"
-    );
+    const activeReturn = await db.query.returns.findFirst({
+        where: and(
+            eq(returns.orderId, order.id),
+            inArray(returns.status, [
+                "REQUESTED",
+                "APPROVED",
+            ])
+        ),
+    });
+
     if (activeReturn) {
-        return { eligible: false, reason: "A return is already in progress for this order." };
+        return {
+            eligible: false,
+            reason: "A return is already in progress for this order.",
+        };
     }
 
     return {
@@ -48,59 +71,135 @@ export const checkReturnEligibilityService = async (orderNumber: string) => {
     };
 };
 
-// NS-8: Create a return request (re-checks eligibility server-side)
 export const createReturnService = async (data: {
     orderNumber: string;
     customerId: number;
     reason: string;
 }) => {
     const order = await db.query.orders.findFirst({
-        where: eq(orders.orderNumber, data.orderNumber),
+        where: and(
+            eq(
+                orders.orderNumber,
+                data.orderNumber
+            ),
+            eq(
+                orders.customerId,
+                data.customerId
+            )
+        ),
     });
 
     if (!order) {
-        throw new Error("Order not found.");
+        throw new Error(
+            "Order not found or does not belong to this customer."
+        );
     }
 
-    const eligibility = await checkReturnEligibilityService(data.orderNumber);
+    if (!data.reason?.trim()) {
+        throw new Error(
+            "Return reason is required."
+        );
+    }
+
+    const eligibility =
+        await checkReturnEligibilityService(
+            data.orderNumber
+        );
+
     if (!eligibility.eligible) {
-        throw new Error(eligibility.reason);
+        throw new Error(
+            eligibility.reason
+        );
     }
 
-    const returnNumber = `RET-${Date.now()}`;
+    const returnNumber =
+        `RET-${Date.now()}`;
 
-    const [newReturn] = await db
-        .insert(returns)
-        .values({
-            returnNumber,
-            orderId: order.id,
-            customerId: data.customerId,
-            reason: data.reason,
-            status: "REQUESTED",
-        })
-        .returning();
+    const [newReturn] =
+        await db
+            .insert(returns)
+            .values({
+                returnNumber,
+                orderId: order.id,
+                customerId: data.customerId,
+                reason: data.reason.trim(),
+                status: "REQUESTED",
+            })
+            .returning();
 
     return newReturn;
 };
 
-// NS-9: Get refund status for a return
-export const getRefundStatusService = async (returnNumber: string) => {
-    const returnRecord = await db.query.returns.findFirst({
-        where: eq(returns.returnNumber, returnNumber),
-    });
+export const getCustomerReturnsService =
+    async (
+        customerId: number
+    ) => {
+        return await db.query.returns.findMany({
+            where: eq(
+                returns.customerId,
+                customerId
+            ),
+
+            orderBy: [
+                desc(
+                    returns.requestedAt
+                ),
+            ],
+
+            with: {
+                order: {
+                    columns: {
+                        orderNumber: true,
+                        status: true,
+                    },
+                },
+
+                refunds: true,
+            },
+        });
+    };
+
+export const getRefundStatusService = async (
+    returnNumber: string
+) => {
+    const returnRecord =
+        await db.query.returns.findFirst({
+            where: eq(
+                returns.returnNumber,
+                returnNumber
+            ),
+        });
 
     if (!returnRecord) {
         return null;
     }
 
-    const refund = await db.query.refunds.findFirst({
-        where: eq(refunds.returnId, returnRecord.id),
-    });
+    const refund =
+        await db.query.refunds.findFirst({
+            where: eq(
+                refunds.returnId,
+                returnRecord.id
+            ),
+        });
 
     return {
-        returnNumber: returnRecord.returnNumber,
-        returnStatus: returnRecord.status,
-        refundStatus: refund ? refund.status : "NOT_STARTED",
-        refundAmount: refund ? refund.amount : null,
+        returnNumber:
+            returnRecord.returnNumber,
+
+        returnStatus:
+            returnRecord.status,
+
+        refundStatus:
+            refund?.status ??
+            "NOT_STARTED",
+
+        refundAmount:
+            refund?.amount ?? null,
+
+        refundNumber:
+            refund?.refundNumber ?? null,
+
+        processedAt:
+            refund?.processedAt ?? null,
     };
 };

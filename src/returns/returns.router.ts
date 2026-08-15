@@ -1,45 +1,96 @@
 import { Express } from "express";
+
 import {
     getReturnEligibilityController,
     createReturnController,
+    getCustomerReturnsController,
     getRefundStatusController,
 } from "./returns.controller";
 
-const returnRoutes = (app: Express) => {
+const returnRoutes = (
+    app: Express
+) => {
 
-    // NS-7: Check if an order is eligible for return
-    app.route("/returns/eligibility/:orderNumber").get(
+
+    app.get(
+        "/returns/eligibility/:orderNumber",
         async (req, res, next) => {
+
             try {
-                await getReturnEligibilityController(req, res);
+
+                await getReturnEligibilityController(
+                    req,
+                    res
+                );
+
             } catch (error) {
+
                 next(error);
+
             }
         }
     );
 
-    // NS-8: Create a return request
-    app.route("/returns").post(
+
+    app.post(
+        "/returns",
         async (req, res, next) => {
+
             try {
-                await createReturnController(req, res);
+
+                await createReturnController(
+                    req,
+                    res
+                );
+
             } catch (error) {
+
                 next(error);
+
             }
         }
     );
 
-    // NS-9: Get refund status for a return
-    app.route("/returns/:returnNumber/refund-status").get(
+
+
+    app.get(
+        "/returns/customer/:customerId",
         async (req, res, next) => {
+
             try {
-                await getRefundStatusController(req, res);
+
+                await getCustomerReturnsController(
+                    req,
+                    res
+                );
+
             } catch (error) {
+
                 next(error);
+
             }
         }
     );
 
+
+    app.get(
+        "/returns/:returnNumber/refund-status",
+        async (req, res, next) => {
+
+            try {
+
+                await getRefundStatusController(
+                    req,
+                    res
+                );
+
+            } catch (error) {
+
+                next(error);
+
+            }
+        }
+    );
 };
 
 export default returnRoutes;
